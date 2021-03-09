@@ -4,3 +4,4 @@
 - [Thực hành] Mảng
 - [Thực hành] Hàm
 - [Thực hành] Đối tượng
+- [Thực hành] Promise
