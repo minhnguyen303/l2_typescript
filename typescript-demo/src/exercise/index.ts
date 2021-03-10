@@ -5,8 +5,8 @@ interface ISingleRepo {
 interface IRepos {
   items: Array<ISingleRepo>;
 }
-async function fetchRepo(): Promise<Array<ISingleRepo>> {
-  let res: Response | IRepos = await fetch('https://api.github.com/search/repositories?q=angular');
+async function fetchRepo(str: string): Promise<Array<ISingleRepo>> {
+  let res: Response | IRepos = await fetch('https://api.github.com/search/repositories?q=' + str);
   res = await res.json() as IRepos;
   return res.items;
 }
@@ -19,9 +19,10 @@ function createItem(text: string): HTMLLIElement {
 
 const container = document.querySelector('.app .list');
 
-async function main() {
+async function main(str: string) {
   // step 1: fetch repo
-  const res = await fetchRepo();
+  container.innerHTML = "";
+  const res = await fetchRepo(str);
   // step 2: lặp qua mảng các item trả về
   // step 3: call hàm createItem sau đó truyền vào name của từng item ở mỗi vòng lặp
   // step 4: call hàm container.appendChild(item mà hàm createItem trả về)
@@ -31,4 +32,12 @@ async function main() {
   });
 }
 
-main();
+const form: HTMLFormElement = document.querySelector('#formSearch');
+
+form.onsubmit = () => {
+  const formData = new FormData(form);
+
+  const str = formData.get('search') as string;
+  main(str);
+  return false; // prevent reload
+};
